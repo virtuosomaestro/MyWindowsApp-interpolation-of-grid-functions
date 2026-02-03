@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using ZedGraph;
 
 namespace WindowsFormsApp1
@@ -63,10 +65,11 @@ namespace WindowsFormsApp1
             PointPairList nodes = new PointPairList();
             if (ind_of_grid == 0)
             {
+                nodes.Add(0.0, get_value_of_function(0.0));
                 double step = 1.0 / (num_of_nodes - 1);
-                for(int i  = 0; i < num_of_nodes; i++)
+                for(int i  = 1; i < num_of_nodes; i++)
                 {
-                    double x = Convert.ToDouble(i) * step;
+                    double x = nodes.Last().X + step;
                     nodes.Add(x , get_value_of_function(x));
                 }
                 return nodes;
@@ -85,12 +88,12 @@ namespace WindowsFormsApp1
         {
             PointPairList list = new PointPairList();
 
-            double xmin = 0;
-            double xmax = 1;
-
-            for (double x = xmin; x <= xmax; x += 0.001)
+            int N = 100;
+            double step = 1.0 / (N - 1), x = 0.0;
+            for (int i = 0; i < N; i++)
             {
                 list.Add(x, get_value_of_function(x));
+                x += step;
             }
 
             LineItem myCurve = pane.AddCurve("Initial function", list, Color.Gray, SymbolType.None);
@@ -108,16 +111,27 @@ namespace WindowsFormsApp1
         {
             PointPairList list = new PointPairList();
 
-            double xmin = 0;
-            double xmax = 1;
-
-            for (double x = xmin; x <= xmax; x += 0.001)
+            int N = 100;
+            double step = 1.0 / (N - 1), x = 0.0;
+            for (int i = 0; i < N; i++)
             {
                 list.Add(x, get_value_of_restored_function(x, nodes));
+                x += step;
             }
 
             LineItem myCurve = pane.AddCurve("Restored function", list, Color.Green, SymbolType.None);
             myCurve.Line.Width = 3.0F;
+        }
+        private double calc_err(PointPairList nodes)
+        {
+            double max_err = 0;
+            for(int i  = 0; i < num_of_nodes -1 ; i++)
+            {
+                double x = (nodes[i+1].X - nodes[i].X) / 2.0;
+                double cur_err = Math.Abs(get_value_of_function(x) - get_value_of_restored_function(x, nodes));
+                max_err = Math.Max(max_err, cur_err);
+            }
+            return max_err;
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -126,6 +140,9 @@ namespace WindowsFormsApp1
             ind_of_grid = grid.SelectedIndex;
             num_of_nodes = Convert.ToInt32(number_of_nodes.Text);
             PointPairList nodes = init_nodes();
+
+            double err = calc_err(nodes); 
+            label8.Text = err.ToString();
 
             GraphPane pane = zedGraphControl1.GraphPane;
             pane.CurveList.Clear();
