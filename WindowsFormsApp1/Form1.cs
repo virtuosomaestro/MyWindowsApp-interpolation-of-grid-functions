@@ -18,11 +18,21 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
+
         int ind_of_problem, ind_of_grid, num_of_nodes;
         double eps;
         public Form1()
         {
             InitializeComponent();
+            GraphPane pane = zedGraphControl1.GraphPane;
+            pane.Title.Text = "График интерполяции";
+            pane.Title.FontSpec.Size = 16;
+            pane.XAxis.Title.Text = "Ось X";
+            pane.YAxis.Title.Text = "Ось Y";
+            zedGraphControl1.GraphPane.XAxis.MajorGrid.IsVisible = true;
+            zedGraphControl1.GraphPane.YAxis.MajorGrid.IsVisible = true;
+            zedGraphControl1.AxisChange();
+            zedGraphControl1.Invalidate();
         }
         private double get_value_of_function(double x)
         {
@@ -40,12 +50,19 @@ namespace WindowsFormsApp1
                     else if (0.5 - eps <= x && x < 0.5 + eps) return (1.0 - 2.0 * x) / (4.0 * eps);
                     else return -0.5;
                 case 4:
-                    return x * x - eps;
+                    double ans = 0;
+                    for(double i = 0; i <= eps; i++)
+                    {
+                        double tmp = Math.Pow(x, i);
+                        if (i % 2 == 1) tmp *= -1;
+                        ans += tmp;                   
+                    }
+                    return ans;
                 default:
                     return 0;
             }
         }
-        private double get_value_of_restored_function(double x, PointPairList nodes)
+        private double get_value_of_interpolant(double x, PointPairList nodes)
         {
             double ans = 0;
             for (int i = 0; i < num_of_nodes; i++)
@@ -96,13 +113,13 @@ namespace WindowsFormsApp1
                 x += step;
             }
 
-            LineItem myCurve = pane.AddCurve("Initial function", list, Color.Gray, SymbolType.None);
+            LineItem myCurve = pane.AddCurve("Функция", list, Color.Gray, SymbolType.None);
             myCurve.Line.Width = 3.0F;
         }
 
         private void draw_nodes(GraphPane pane, PointPairList nodes)
         {
-            LineItem myCurve = pane.AddCurve("Node", nodes, Color.Red, SymbolType.Circle);
+            LineItem myCurve = pane.AddCurve("Узел", nodes, Color.Red, SymbolType.Circle);
             myCurve.Line.IsVisible = false;
             myCurve.Symbol.Fill = new Fill(Color.Blue);
             myCurve.Line.Width = 8.0F;
@@ -115,20 +132,21 @@ namespace WindowsFormsApp1
             double step = 1.0 / (N - 1), x = 0.0;
             for (int i = 0; i < N; i++)
             {
-                list.Add(x, get_value_of_restored_function(x, nodes));
+                list.Add(x, get_value_of_interpolant(x, nodes));
                 x += step;
             }
 
-            LineItem myCurve = pane.AddCurve("Restored function", list, Color.Green, SymbolType.None);
+            LineItem myCurve = pane.AddCurve("Интерполянт", list, Color.Green, SymbolType.None);
             myCurve.Line.Width = 3.0F;
         }
+
         private double calc_err(PointPairList nodes)
         {
             double max_err = 0;
             for(int i  = 0; i < num_of_nodes -1 ; i++)
             {
                 double x = (nodes[i+1].X - nodes[i].X) / 2.0;
-                double cur_err = Math.Abs(get_value_of_function(x) - get_value_of_restored_function(x, nodes));
+                double cur_err = Math.Abs(get_value_of_function(x) - get_value_of_interpolant(x, nodes));
                 max_err = Math.Max(max_err, cur_err);
             }
             return max_err;
@@ -145,7 +163,11 @@ namespace WindowsFormsApp1
             label8.Text = err.ToString();
 
             GraphPane pane = zedGraphControl1.GraphPane;
+
             pane.CurveList.Clear();
+            
+            zedGraphControl1.AxisChange();
+            zedGraphControl1.Invalidate();
             draw_nodes(pane, nodes);
             draw_restored_function(pane, nodes);
             draw_initial_function(pane);

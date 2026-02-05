@@ -53,11 +53,13 @@
             // 
             // button1
             // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F);
             this.button1.Location = new System.Drawing.Point(12, 364);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(160, 55);
             this.button1.TabIndex = 3;
-            this.button1.Text = "Draw";
+            this.button1.Text = "Начать";
+            this.button1.UseMnemonic = false;
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -89,27 +91,30 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 26);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.label1.Location = new System.Drawing.Point(9, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.Size = new System.Drawing.Size(57, 17);
             this.label1.TabIndex = 7;
             this.label1.Text = "Задача";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 203);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.label3.Location = new System.Drawing.Point(9, 199);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(37, 13);
+            this.label3.Size = new System.Drawing.Size(47, 17);
             this.label3.TabIndex = 9;
             this.label3.Text = "Сетка";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 283);
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.label4.Location = new System.Drawing.Point(9, 279);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(85, 13);
+            this.label4.Size = new System.Drawing.Size(111, 17);
             this.label4.TabIndex = 10;
             this.label4.Text = "Параметр (0, 1]";
             // 
@@ -123,9 +128,10 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 116);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.label2.Location = new System.Drawing.Point(9, 112);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 13);
+            this.label2.Size = new System.Drawing.Size(127, 17);
             this.label2.TabIndex = 12;
             this.label2.Text = "Количество узлов";
             // 
@@ -139,7 +145,7 @@
             // 
             // zedGraphControl1
             // 
-            this.zedGraphControl1.Location = new System.Drawing.Point(198, 26);
+            this.zedGraphControl1.Location = new System.Drawing.Point(192, 26);
             this.zedGraphControl1.Name = "zedGraphControl1";
             this.zedGraphControl1.ScrollGrace = 0D;
             this.zedGraphControl1.ScrollMaxX = 0D;
@@ -148,24 +154,26 @@
             this.zedGraphControl1.ScrollMinX = 0D;
             this.zedGraphControl1.ScrollMinY = 0D;
             this.zedGraphControl1.ScrollMinY2 = 0D;
-            this.zedGraphControl1.Size = new System.Drawing.Size(580, 327);
+            this.zedGraphControl1.Size = new System.Drawing.Size(587, 321);
             this.zedGraphControl1.TabIndex = 14;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(198, 383);
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F);
+            this.label7.Location = new System.Drawing.Point(188, 383);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(152, 13);
+            this.label7.Size = new System.Drawing.Size(253, 20);
             this.label7.TabIndex = 16;
             this.label7.Text = "Погрешность интерполяции:";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(357, 383);
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+            this.label8.Location = new System.Drawing.Point(441, 386);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(0, 13);
+            this.label8.Size = new System.Drawing.Size(0, 17);
             this.label8.TabIndex = 17;
             // 
             // Form1
