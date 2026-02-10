@@ -105,7 +105,7 @@ namespace WindowsFormsApp1
         {
             PointPairList list = new PointPairList();
 
-            int N = 100;
+            int N = 1000;
             double step = 1.0 / (N - 1), x = 0.0;
             for (int i = 0; i < N; i++)
             {
@@ -128,7 +128,7 @@ namespace WindowsFormsApp1
         {
             PointPairList list = new PointPairList();
 
-            int N = 100;
+            int N = 1000;
             double step = 1.0 / (N - 1), x = 0.0;
             for (int i = 0; i < N; i++)
             {
@@ -143,9 +143,9 @@ namespace WindowsFormsApp1
         private double calc_err(PointPairList nodes)
         {
             double max_err = 0;
-            for(int i  = 0; i < num_of_nodes -1 ; i++)
+            for(int i  = 0; i < num_of_nodes - 1 ; i++)
             {
-                double x = (nodes[i+1].X - nodes[i].X) / 2.0;
+                double x = (nodes[i+1].X + nodes[i].X) / 2.0;
                 double cur_err = Math.Abs(get_value_of_function(x) - get_value_of_interpolant(x, nodes));
                 max_err = Math.Max(max_err, cur_err);
             }
@@ -159,9 +159,6 @@ namespace WindowsFormsApp1
             num_of_nodes = Convert.ToInt32(number_of_nodes.Text);
             PointPairList nodes = init_nodes();
 
-            double err = calc_err(nodes); 
-            label8.Text = err.ToString();
-
             GraphPane pane = zedGraphControl1.GraphPane;
 
             pane.CurveList.Clear();
@@ -173,6 +170,9 @@ namespace WindowsFormsApp1
             draw_initial_function(pane);
             zedGraphControl1.AxisChange();
             zedGraphControl1.Invalidate();
+
+            double err = calc_err(nodes);
+            label8.Text = err.ToString();
         }
 
     }
