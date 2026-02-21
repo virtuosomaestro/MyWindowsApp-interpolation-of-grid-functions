@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.epsilon = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.Draw = new System.Windows.Forms.Button();
             this.grid = new System.Windows.Forms.ComboBox();
             this.number_of_problem = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -42,6 +42,8 @@
             this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.playF = new System.Windows.Forms.Button();
+            this.PlayI = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // epsilon
@@ -51,17 +53,17 @@
             this.epsilon.Size = new System.Drawing.Size(160, 20);
             this.epsilon.TabIndex = 2;
             // 
-            // button1
+            // Draw
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F);
-            this.button1.Location = new System.Drawing.Point(12, 364);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(160, 55);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Начать";
-            this.button1.UseMnemonic = false;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.Draw.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F);
+            this.Draw.Location = new System.Drawing.Point(12, 338);
+            this.Draw.Name = "Draw";
+            this.Draw.Size = new System.Drawing.Size(160, 33);
+            this.Draw.TabIndex = 3;
+            this.Draw.Text = "Рисовать";
+            this.Draw.UseMnemonic = false;
+            this.Draw.UseVisualStyleBackColor = true;
+            this.Draw.Click += new System.EventHandler(this.button1_Click);
             // 
             // grid
             // 
@@ -176,11 +178,35 @@
             this.label8.Size = new System.Drawing.Size(0, 17);
             this.label8.TabIndex = 17;
             // 
+            // playF
+            // 
+            this.playF.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F);
+            this.playF.Location = new System.Drawing.Point(12, 377);
+            this.playF.Name = "playF";
+            this.playF.Size = new System.Drawing.Size(160, 32);
+            this.playF.TabIndex = 18;
+            this.playF.Text = "Играть Функцию";
+            this.playF.UseVisualStyleBackColor = true;
+            this.playF.Click += new System.EventHandler(this.playF_Click);
+            // 
+            // PlayI
+            // 
+            this.PlayI.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F);
+            this.PlayI.Location = new System.Drawing.Point(12, 415);
+            this.PlayI.Name = "PlayI";
+            this.PlayI.Size = new System.Drawing.Size(160, 33);
+            this.PlayI.TabIndex = 19;
+            this.PlayI.Text = "Играть интерполянт";
+            this.PlayI.UseVisualStyleBackColor = true;
+            this.PlayI.Click += new System.EventHandler(this.PlayI_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.PlayI);
+            this.Controls.Add(this.playF);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.zedGraphControl1);
@@ -192,7 +218,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.number_of_problem);
             this.Controls.Add(this.grid);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.Draw);
             this.Controls.Add(this.epsilon);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -203,7 +229,7 @@
 
         #endregion
         private System.Windows.Forms.TextBox epsilon;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button Draw;
         private System.Windows.Forms.ComboBox grid;
         private System.Windows.Forms.ComboBox number_of_problem;
         private System.Windows.Forms.Label label1;
@@ -215,6 +241,8 @@
         private ZedGraph.ZedGraphControl zedGraphControl1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button playF;
+        private System.Windows.Forms.Button PlayI;
     }
 }
 

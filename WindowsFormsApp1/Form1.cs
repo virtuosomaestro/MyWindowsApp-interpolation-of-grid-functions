@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using ZedGraph;
+using NAudio.Wave;
+
 
 namespace WindowsFormsApp1
 {
@@ -21,6 +23,7 @@ namespace WindowsFormsApp1
 
         int ind_of_problem, ind_of_grid, num_of_nodes;
         double eps;
+        PointPairList nodes = new PointPairList();
         public Form1()
         {
             InitializeComponent();
@@ -62,7 +65,7 @@ namespace WindowsFormsApp1
                     return 0;
             }
         }
-        private double get_value_of_interpolant(double x, PointPairList nodes)
+        private double get_value_of_interpolant(double x)
         {
             double ans = 0;
             for (int i = 0; i < num_of_nodes; i++)
@@ -117,14 +120,14 @@ namespace WindowsFormsApp1
             myCurve.Line.Width = 3.0F;
         }
 
-        private void draw_nodes(GraphPane pane, PointPairList nodes)
+        private void draw_nodes(GraphPane pane)
         {
             LineItem myCurve = pane.AddCurve("Узел", nodes, Color.Red, SymbolType.Circle);
             myCurve.Line.IsVisible = false;
             myCurve.Symbol.Fill = new Fill(Color.Blue);
             myCurve.Line.Width = 8.0F;
         }
-        private void draw_restored_function(GraphPane pane, PointPairList nodes)
+        private void draw_restored_function(GraphPane pane)
         {
             PointPairList list = new PointPairList();
 
@@ -132,12 +135,57 @@ namespace WindowsFormsApp1
             double step = 1.0 / (N - 1), x = 0.0;
             for (int i = 0; i < N; i++)
             {
-                list.Add(x, get_value_of_interpolant(x, nodes));
+                list.Add(x, get_value_of_interpolant(x));
                 x += step;
             }
 
             LineItem myCurve = pane.AddCurve("Интерполянт", list, Color.Green, SymbolType.None);
             myCurve.Line.Width = 3.0F;
+        }
+
+        private WaveOutEvent outputDevice;
+        private BufferedWaveProvider waveProvider;
+
+        private void PlayFunctionAsSound(char ch)
+        {
+            int sampleRate = 44100;      
+            int durationSeconds = 3;    
+            outputDevice = new WaveOutEvent();
+            waveProvider = new BufferedWaveProvider(new WaveFormat(sampleRate, 16, 1));
+
+            byte[] buffer = new byte[sampleRate * durationSeconds * 2];
+            int index = 0;
+            double phase = 0.0;
+            double smoothedFrequency = 400;
+            double smoothingFactor = 0.01; 
+
+            for (int n = 0; n < sampleRate * durationSeconds; n++)
+            {
+                double t = (double)n / sampleRate;
+                double x = t / durationSeconds;
+
+                double f = 0.0;
+
+                if (ch == 'F') f = get_value_of_function(x);
+                else if (ch == 'L') f = get_value_of_interpolant(x);
+
+                f += 2.0;
+
+                double targetFrequency = 200 + 800 * f; 
+
+                smoothedFrequency += smoothingFactor * (targetFrequency - smoothedFrequency);
+
+                phase += 2 * Math.PI * smoothedFrequency / sampleRate;
+                double y = Math.Sin(phase);
+
+                short sample = (short)(0.9 * y * short.MaxValue);
+                buffer[index++] = (byte)(sample & 0xFF);
+                buffer[index++] = (byte)((sample >> 8) & 0xFF);
+            }
+
+            waveProvider.AddSamples(buffer, 0, buffer.Length);
+            outputDevice.Init(waveProvider);
+            outputDevice.Play();
         }
 
         private double calc_err(PointPairList nodes)
@@ -146,18 +194,19 @@ namespace WindowsFormsApp1
             for(int i  = 0; i < num_of_nodes - 1 ; i++)
             {
                 double x = (nodes[i+1].X + nodes[i].X) / 2.0;
-                double cur_err = Math.Abs(get_value_of_function(x) - get_value_of_interpolant(x, nodes));
+                double cur_err = Math.Abs(get_value_of_function(x) - get_value_of_interpolant(x));
                 max_err = Math.Max(max_err, cur_err);
             }
             return max_err;
         }
+
         private void button1_Click(object sender, EventArgs e)
         {
             eps = Convert.ToDouble(epsilon.Text);
             ind_of_problem = number_of_problem.SelectedIndex;
             ind_of_grid = grid.SelectedIndex;
             num_of_nodes = Convert.ToInt32(number_of_nodes.Text);
-            PointPairList nodes = init_nodes();
+            nodes = init_nodes();
 
             GraphPane pane = zedGraphControl1.GraphPane;
 
@@ -165,14 +214,34 @@ namespace WindowsFormsApp1
             
             zedGraphControl1.AxisChange();
             zedGraphControl1.Invalidate();
-            draw_nodes(pane, nodes);
-            draw_restored_function(pane, nodes);
+            draw_nodes(pane);
+            draw_restored_function(pane);
             draw_initial_function(pane);
             zedGraphControl1.AxisChange();
             zedGraphControl1.Invalidate();
 
             double err = calc_err(nodes);
             label8.Text = err.ToString();
+        }
+
+        private void playF_Click(object sender, EventArgs e)
+        {
+            eps = Convert.ToDouble(epsilon.Text);
+            ind_of_problem = number_of_problem.SelectedIndex;
+            ind_of_grid = grid.SelectedIndex;
+            num_of_nodes = Convert.ToInt32(number_of_nodes.Text);
+            nodes = init_nodes();
+            PlayFunctionAsSound('F');
+        }
+
+        private void PlayI_Click(object sender, EventArgs e)
+        {
+            eps = Convert.ToDouble(epsilon.Text);
+            ind_of_problem = number_of_problem.SelectedIndex;
+            ind_of_grid = grid.SelectedIndex;
+            num_of_nodes = Convert.ToInt32(number_of_nodes.Text);
+            nodes = init_nodes();
+            PlayFunctionAsSound('L');
         }
 
     }
