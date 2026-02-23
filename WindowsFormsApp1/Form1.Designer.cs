@@ -44,6 +44,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.playF = new System.Windows.Forms.Button();
             this.PlayI = new System.Windows.Forms.Button();
+            this.copy_err = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // epsilon
@@ -185,7 +186,7 @@
             this.playF.Name = "playF";
             this.playF.Size = new System.Drawing.Size(160, 32);
             this.playF.TabIndex = 18;
-            this.playF.Text = "Играть Функцию";
+            this.playF.Text = "Восроизвести f(x)";
             this.playF.UseVisualStyleBackColor = true;
             this.playF.Click += new System.EventHandler(this.playF_Click);
             // 
@@ -196,15 +197,27 @@
             this.PlayI.Name = "PlayI";
             this.PlayI.Size = new System.Drawing.Size(160, 33);
             this.PlayI.TabIndex = 19;
-            this.PlayI.Text = "Играть интерполянт";
+            this.PlayI.Text = "Восроизвести L(x)";
             this.PlayI.UseVisualStyleBackColor = true;
             this.PlayI.Click += new System.EventHandler(this.PlayI_Click);
+            // 
+            // copy_err
+            // 
+            this.copy_err.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
+            this.copy_err.Location = new System.Drawing.Point(526, 376);
+            this.copy_err.Name = "copy_err";
+            this.copy_err.Size = new System.Drawing.Size(196, 33);
+            this.copy_err.TabIndex = 20;
+            this.copy_err.Text = "Копировать погрешность";
+            this.copy_err.UseVisualStyleBackColor = true;
+            this.copy_err.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.copy_err);
             this.Controls.Add(this.PlayI);
             this.Controls.Add(this.playF);
             this.Controls.Add(this.label8);
@@ -243,6 +256,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button playF;
         private System.Windows.Forms.Button PlayI;
+        private System.Windows.Forms.Button copy_err;
     }
 }
 

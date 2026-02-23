@@ -54,13 +54,11 @@ namespace WindowsFormsApp1
                     else return -0.5;
                 case 4:
                     double ans = 0;
-                    for(double i = 0; i <= eps; i++)
+                    for (int i = 1; i <= 4; i++)
                     {
-                        double tmp = Math.Pow(x, i);
-                        if (i % 2 == 1) tmp *= -1;
-                        ans += tmp;                   
+                        ans += (1.0 / i) * Math.Sin(i * Math.PI * x * 4);
                     }
-                    return ans;
+                    return (ans + 1) / 2 + eps; 
                 default:
                     return 0;
             }
@@ -108,7 +106,7 @@ namespace WindowsFormsApp1
         {
             PointPairList list = new PointPairList();
 
-            int N = 1000;
+            int N = 10000;
             double step = 1.0 / (N - 1), x = 0.0;
             for (int i = 0; i < N; i++)
             {
@@ -131,7 +129,7 @@ namespace WindowsFormsApp1
         {
             PointPairList list = new PointPairList();
 
-            int N = 1000;
+            int N = 10000;
             double step = 1.0 / (N - 1), x = 0.0;
             for (int i = 0; i < N; i++)
             {
@@ -142,14 +140,23 @@ namespace WindowsFormsApp1
             LineItem myCurve = pane.AddCurve("Интерполянт", list, Color.Green, SymbolType.None);
             myCurve.Line.Width = 3.0F;
         }
-
-        private WaveOutEvent outputDevice;
-        private BufferedWaveProvider waveProvider;
-
+        private double calc_err(PointPairList nodes)
+        {
+            double max_err = 0;
+            for(int i  = 0; i < num_of_nodes - 1 ; i++)
+            {
+                double x = (nodes[i+1].X + nodes[i].X) / 2.0;
+                double cur_err = Math.Abs(get_value_of_function(x) - get_value_of_interpolant(x));
+                max_err = Math.Max(max_err, cur_err);
+            }
+            return max_err;
+        }
         private void PlayFunctionAsSound(char ch)
         {
-            int sampleRate = 44100;      
-            int durationSeconds = 3;    
+            WaveOutEvent outputDevice;
+            BufferedWaveProvider waveProvider;
+            int sampleRate = 44100;
+            int durationSeconds = 5;
             outputDevice = new WaveOutEvent();
             waveProvider = new BufferedWaveProvider(new WaveFormat(sampleRate, 16, 1));
 
@@ -157,7 +164,7 @@ namespace WindowsFormsApp1
             int index = 0;
             double phase = 0.0;
             double smoothedFrequency = 400;
-            double smoothingFactor = 0.01; 
+            double smoothingFactor = 0.01;
 
             for (int n = 0; n < sampleRate * durationSeconds; n++)
             {
@@ -171,7 +178,7 @@ namespace WindowsFormsApp1
 
                 f += 2.0;
 
-                double targetFrequency = 200 + 800 * f; 
+                double targetFrequency = 200 + 800 * f;
 
                 smoothedFrequency += smoothingFactor * (targetFrequency - smoothedFrequency);
 
@@ -186,18 +193,6 @@ namespace WindowsFormsApp1
             waveProvider.AddSamples(buffer, 0, buffer.Length);
             outputDevice.Init(waveProvider);
             outputDevice.Play();
-        }
-
-        private double calc_err(PointPairList nodes)
-        {
-            double max_err = 0;
-            for(int i  = 0; i < num_of_nodes - 1 ; i++)
-            {
-                double x = (nodes[i+1].X + nodes[i].X) / 2.0;
-                double cur_err = Math.Abs(get_value_of_function(x) - get_value_of_interpolant(x));
-                max_err = Math.Max(max_err, cur_err);
-            }
-            return max_err;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -221,7 +216,25 @@ namespace WindowsFormsApp1
             zedGraphControl1.Invalidate();
 
             double err = calc_err(nodes);
-            label8.Text = err.ToString();
+            label8.Text = err.ToString("F5");
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
+            double err = calc_err(nodes);
+            label8.Text = err.ToString("F5");
+
+            Clipboard.SetText(label8.Text);
+
+            label8.BackColor = Color.LightYellow;
+            Timer timer = new Timer();
+            timer.Interval = 300;
+            timer.Tick += (s, args) => {
+                label8.BackColor = SystemColors.Control;
+                timer.Stop();
+            };
+            timer.Start();
         }
 
         private void playF_Click(object sender, EventArgs e)
