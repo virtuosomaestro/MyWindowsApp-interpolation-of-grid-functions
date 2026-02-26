@@ -117,9 +117,9 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
             this.label4.Location = new System.Drawing.Point(9, 279);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(111, 17);
+            this.label4.Size = new System.Drawing.Size(74, 17);
             this.label4.TabIndex = 10;
-            this.label4.Text = "Параметр (0, 1]";
+            this.label4.Text = "Параметр";
             // 
             // number_of_nodes
             // 
@@ -204,9 +204,9 @@
             // copy_err
             // 
             this.copy_err.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F);
-            this.copy_err.Location = new System.Drawing.Point(526, 376);
+            this.copy_err.Location = new System.Drawing.Point(192, 414);
             this.copy_err.Name = "copy_err";
-            this.copy_err.Size = new System.Drawing.Size(196, 33);
+            this.copy_err.Size = new System.Drawing.Size(249, 33);
             this.copy_err.TabIndex = 20;
             this.copy_err.Text = "Копировать погрешность";
             this.copy_err.UseVisualStyleBackColor = true;
